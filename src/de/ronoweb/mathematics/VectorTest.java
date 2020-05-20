@@ -62,4 +62,12 @@ class VectorTest {
         b = new Vector(1, 2, 3);
         assertFalse(a.isLinearDependent(b));
     }
+
+    @Test
+    void crossProduct() {
+        Vector a = new Vector(1, 2, 3);
+        Vector b = new Vector(4, 5, 6);
+        Vector expected = new Vector(-3,6,-3);
+        assertEquals(expected, a.crossProduct(b));
+    }
 }

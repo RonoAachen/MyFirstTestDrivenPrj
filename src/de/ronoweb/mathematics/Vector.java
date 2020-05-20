@@ -19,13 +19,14 @@ public class Vector {
         return String.format("x=%.2f y=%.2f z=%.2f",this.x, this.y, this.z);
     }
 
-    // create a vector
+    // create a vector on 3 direction parameters
     public Vector(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    // create a vector between 2 different points
     public Vector(Point p1, Point p2) {
         this.x = p2.GetX() - p1.GetX();
         this.y = p2.GetY() - p1.GetY();
@@ -81,5 +82,12 @@ public class Vector {
         double fy = y * v.y;
         double fz = z * v.z;
         return (fx == fy) && (fx == fz);
+    }
+
+    public Vector crossProduct(Vector v) {
+        double i = this.y * v.z - this.z * v.y;
+        double j = this.z * v.x - this.x * v.z;
+        double k = this.x * v.y - this.y * v.x;
+        return new Vector(i, j, k);
     }
 }
