@@ -7,13 +7,8 @@ public class Vector {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj){
-            return true;
-        }
-
-        if (obj == null){
-            return false;
-        }
+        if (this == obj) return true;
+        if (obj == null) return false;
 
         Vector o = (Vector)obj;
         return (x == o.x && y == o.y && z == o.z);
@@ -24,6 +19,7 @@ public class Vector {
         return String.format("x=%.2f y=%.2f z=%.2f",this.x, this.y, this.z);
     }
 
+    // create a vector
     public Vector(double x, double y, double z) {
         this.x = x;
         this.y = y;
