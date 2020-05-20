@@ -21,7 +21,7 @@ public class Vector {
 
     @Override
     public String toString() {
-        return x + "\t" + y + "\t" + z;
+        return String.format("x=%.2f y=%.2f z=%.2f",this.x, this.y, this.z);
     }
 
     public Vector(double x, double y, double z) {
