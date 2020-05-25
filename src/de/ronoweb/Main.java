@@ -48,5 +48,7 @@ public class Main {
         System.out.println(A.toString());
         System.out.println("det A = " + A.determinant());
 
+        System.out.println(A.Test());
+
     }
 }

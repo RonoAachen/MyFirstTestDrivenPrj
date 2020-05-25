@@ -1,7 +1,5 @@
 package de.ronoweb.mathematics;
 
-import java.util.Arrays;
-
 public class Matrix {
     private double[][] data;
     private int numOfRows;
@@ -57,10 +55,12 @@ public class Matrix {
     }
 
     public double determinant() {
-        return matrixDeterminant(data);
+        return matrixDeterminantRecursively(data);
     }
 
-    public static double matrixDeterminant (double[][] matrix) {
+    // Matrix Determinante mit Hilfe des
+    // Laplace-Entwicklungssatzes
+    private static double matrixDeterminantRecursively(double[][] matrix) {
         double temporary[][];
         double result = 0;
 
@@ -87,9 +87,41 @@ public class Matrix {
                 }
             }
 
-            result += matrix[0][i] * Math.pow (-1, (double) i) * matrixDeterminant (temporary);
+            result += matrix[0][i] * Math.pow (-1, (double) i) * matrixDeterminantRecursively(temporary);
         }
         return (result);
+    }
+
+    public double Test() {
+       // return shortMatrixDeterminant( new double[][] { {6, 5}, {9, 8} });
+
+        for (var i=0; i < 3; i++) {
+            for ( var j=0; j<3; j++) {
+                System.out.printf("%d, %d: %f\n",i, j, signFactor(i, j));
+            }
+        }
+
+        return signFactor(this.data, 2, 0);
+    }
+
+    private static double shortMatrixDeterminant(double[][] m) {
+        return (m[0][0] * m[1][1]) - (m[1][0] * m[0][1]);
+    }
+
+    private static double signFactor(int row, int col) {
+        return Math.pow(-1, (row + col));
+    }
+
+    private static double signFactor(double[][] m, int row, int col) {
+        int rowCount = m.length;
+        int colCount = m[0].length;
+        double tmp = (row * colCount) + col;
+
+        if (tmp % 2 == 0) {
+            return 1.0;
+        }
+
+        return -1.0;
     }
 
 }
