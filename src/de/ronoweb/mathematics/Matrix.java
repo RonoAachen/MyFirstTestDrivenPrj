@@ -69,8 +69,16 @@ public class Matrix {
     }
 
 
-    public double determinant() {
+    public double determinantLaplace() {
         return matrixDeterminantRecursively(data);
+    }
+    public double determinantGauss() {
+        var matrix = triangleWithGauss(this.data);
+        double result = 1.0;
+        for (var i=0; i<this.numOfRows; i++) {
+            result *= this.data[i][i];
+        }
+        return result;
     }
 
     // Matrix Determinante mit Hilfe des
@@ -107,25 +115,13 @@ public class Matrix {
         return (result);
     }
 
-    public double Test() {
-       // return shortMatrixDeterminant( new double[][] { {6, 5}, {9, 8} });
-
-        for (var i=0; i < 3; i++) {
-            for ( var j=0; j<3; j++) {
-                System.out.printf("%d, %d: %f\n",i, j, signFactor(i, j));
-            }
-        }
-
-        return signFactor(this.data, 2, 0);
-    }
-
-    public Matrix triangleWithGauss() {
-        if (this.numOfRows < this.numOfColumns) {
+    private Matrix triangleWithGauss(double[][] matrix) {
+        if (matrix.length < matrix[0].length) {
             System.out.println("There is no unique solution for these equations!");
             return null;
         }
 
-        Matrix result = new Matrix(this.data);
+        Matrix result = new Matrix(matrix);
 
         for (var col=0; col<this.numOfColumns - 1; col++) {
             for (var row= col + 1; row<this.numOfRows; row++) {

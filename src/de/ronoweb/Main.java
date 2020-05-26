@@ -46,11 +46,7 @@ public class Main {
         A.SetValue(2,2, -2);
 
         System.out.println(A.toString());
-        System.out.println("det A = " + A.determinant());
-
-        var B = A.triangleWithGauss();
-
-        System.out.println(B);
-
+        System.out.println("(laplace) det A = " + A.determinantLaplace());
+        System.out.println("(gauss) det A = " + A.determinantGauss());
     }
 }
