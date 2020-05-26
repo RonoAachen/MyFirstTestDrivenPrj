@@ -33,17 +33,17 @@ public class Main {
 //        System.out.println(A.toString());
 
         Matrix A = new Matrix(3,3);
-        A.SetValue(0,0, 2);
-        A.SetValue(1,0, -2);
-        A.SetValue(2,0, 1);
+        A.setValue(0,0, 2);
+        A.setValue(1,0, -2);
+        A.setValue(2,0, 1);
 
-        A.SetValue(0,1, -2);
-        A.SetValue(1,1, 1);
-        A.SetValue(2,1, 0);
+        A.setValue(0,1, -2);
+        A.setValue(1,1, 1);
+        A.setValue(2,1, 0);
 
-        A.SetValue(0,2, 4);
-        A.SetValue(1,2, -6);
-        A.SetValue(2,2, -2);
+        A.setValue(0,2, 4);
+        A.setValue(1,2, -6);
+        A.setValue(2,2, -2);
 
         System.out.println(A.toString());
         System.out.println("(laplace) det A = " + A.determinantLaplace());

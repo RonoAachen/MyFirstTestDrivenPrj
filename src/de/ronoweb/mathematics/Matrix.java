@@ -17,20 +17,24 @@ public class Matrix {
         this.numOfColumns = data[0].length;
     }
 
-    public double GetValue(int row, int column) {
+    public double getValue(int row, int column) {
         return data[row][column];
     }
 
-    public void SetValue(int row, int column, double value) {
+    public void setValue(int row, int column, double value) {
         data[row][column] = value;
     }
 
-    public int GetRowCount() {
+    public int getRowCount() {
         return numOfRows;
     }
 
-    public int GetColumnCount() {
+    public int getColumnCount() {
         return numOfColumns;
+    }
+
+    public double[][] toArray() {
+        return this.data;
     }
 
     @Override
@@ -54,18 +58,19 @@ public class Matrix {
         return result;
     }
 
-    public double[] getRowData(int row) {
-        double[] result = new double[this.numOfColumns];
-        for (var col=0; col<this.numOfColumns; col++){
-            result[col] = this.data[row][col];
-        }
-        return result;
-    }
 
-    public void setRowData(double[] rowData, int row) {
-        for (var col=0; col<this.numOfColumns; col++){
-            this.data[row][col] = rowData[col];
+    public double[] gauss(double[] vector) {
+        var result = new double[vector.length];
+        var triangle = triangleWithGauss(this.data, vector);
+
+        for (var i=vector.length - 1; i>=0; i--) {
+            if (triangle[i][i] == 0.0) {
+                return null;
+            }
+            result[i] = vector[i] / triangle[i][i];
         }
+
+        return result;
     }
 
 
@@ -115,27 +120,72 @@ public class Matrix {
         return (result);
     }
 
-    private Matrix triangleWithGauss(double[][] matrix) {
+    private double[][] triangleWithGauss(double[][] matrix) {
         if (matrix.length < matrix[0].length) {
             System.out.println("There is no unique solution for these equations!");
             return null;
         }
 
-        Matrix result = new Matrix(matrix);
-
+        var result = matrix;
         for (var col=0; col<this.numOfColumns - 1; col++) {
             for (var row= col + 1; row<this.numOfRows; row++) {
                 if (this.data[row][col] != 0) {
                     var factor = (this.data[col][col] / this.data[row][col]) * -1.0;
-                    var tmpRow = product(this.getRowData(row), factor);
-                    result.setRowData(add(this.getRowData(col), tmpRow), row);
-                }
-                else {
-                    result.setRowData(this.getRowData(row), row);
+                    var tmpRow = product(getDataRow(result, row), factor);
+                    var newRow = add(getDataRow(result,col), tmpRow);
+                    result = setDataRow(result, newRow, row);
                 }
             }
         }
 
+        return result;
+    }
+
+    private double[][] triangleWithGauss(double[][] matrix, double[] vector) {
+        if (matrix.length < matrix[0].length) {
+            System.out.println("There is no unique solution for these equations!");
+            return null;
+        }
+
+        var m = matrix;
+        var v = vector;
+        for (var col=0; col<this.numOfColumns - 1; col++) {
+            for (var row= col + 1; row<this.numOfRows; row++) {
+                if (this.data[row][col] != 0) {
+                    var factor = (this.data[col][col] / this.data[row][col]) * -1.0;
+                    var tmpRow = product(getDataRow(m, row), factor);
+                    var newRow = add(getDataRow(m,col), tmpRow);
+                    m = setDataRow(m, newRow, row);
+
+                    v[row] = v[col] + (v[row] * factor);
+                }
+            }
+        }
+
+        double[][] result = new double[m.length][m.length + 1];
+        for(var row=0; row<m.length; row++) {
+            for(var col=0; col<m[0].length; col++) {
+                result[row][col] = m[row][col];
+            }
+            result[row][result[0].length-1] = v[row];
+        }
+
+        return result;
+    }
+
+    private double[] getDataRow(double[][] matrix, int row) {
+        double[] result = new double[matrix[0].length];
+        for (var col=0; col<result.length; col++){
+            result[col] = matrix[row][col];
+        }
+        return result;
+    }
+
+    private double[][] setDataRow(double[][] matrix, double[] rowData, int row) {
+        var result = matrix;
+        for (var col=0; col<rowData.length; col++){
+            result[row][col] = rowData[col];
+        }
         return result;
     }
 
