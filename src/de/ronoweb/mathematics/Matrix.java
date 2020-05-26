@@ -54,6 +54,21 @@ public class Matrix {
         return result;
     }
 
+    public double[] getRowData(int row) {
+        double[] result = new double[this.numOfColumns];
+        for (var col=0; col<this.numOfColumns; col++){
+            result[col] = this.data[row][col];
+        }
+        return result;
+    }
+
+    public void setRowData(double[] rowData, int row) {
+        for (var col=0; col<this.numOfColumns; col++){
+            this.data[row][col] = rowData[col];
+        }
+    }
+
+
     public double determinant() {
         return matrixDeterminantRecursively(data);
     }
@@ -104,6 +119,47 @@ public class Matrix {
         return signFactor(this.data, 2, 0);
     }
 
+    public Matrix triangleWithGauss() {
+        if (this.numOfRows < this.numOfColumns) {
+            System.out.println("There is no unique solution for these equations!");
+            return null;
+        }
+
+        Matrix result = new Matrix(this.data);
+
+        for (var col=0; col<this.numOfColumns - 1; col++) {
+            for (var row= col + 1; row<this.numOfRows; row++) {
+                if (this.data[row][col] != 0) {
+                    var factor = (this.data[col][col] / this.data[row][col]) * -1.0;
+                    var tmpRow = product(this.getRowData(row), factor);
+                    result.setRowData(add(this.getRowData(col), tmpRow), row);
+                }
+                else {
+                    result.setRowData(this.getRowData(row), row);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static double[] add(double[] data1, double[] data2) {
+        double[] result = new double[data1.length];
+        for (var i=0; i<data1.length; i++) {
+            result[i] = data1[i] + data2[i];
+        }
+        return result;
+    }
+
+    private static double[] product(double[] data, double value) {
+        var result = new double[data.length];
+        for (var i=0; i<data.length; i++) {
+            result[i] = data[i] * value;
+        }
+
+        return result;
+    }
+    
     private static double shortMatrixDeterminant(double[][] m) {
         return (m[0][0] * m[1][1]) - (m[1][0] * m[0][1]);
     }

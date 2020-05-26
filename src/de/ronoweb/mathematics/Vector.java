@@ -1,9 +1,7 @@
 package de.ronoweb.mathematics;
 
 public class Vector {
-    private final double x;
-    private final double y;
-    private final double z;
+    private double[] data;
 
     @Override
     public boolean equals(Object obj) {
@@ -11,83 +9,42 @@ public class Vector {
         if (obj == null) return false;
 
         Vector o = (Vector)obj;
-        return (x == o.x && y == o.y && z == o.z);
+        boolean result = true;
+        for (var i=0; i<this.data.length; i++) {
+            if (this.data[i] != o.getValue(i)) {
+                result = false;
+            }
+        }
+        return result;
     }
 
     @Override
     public String toString() {
-        return String.format("x=%.2f y=%.2f z=%.2f",this.x, this.y, this.z);
+        // ToDo: build string here
+        return super.toString();
     }
 
-    // create a vector on 3 direction parameters
-    public Vector(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Vector(int numberOfElements) {
+        data = new double[numberOfElements];
     }
 
-    // create a vector between 2 different points
-    public Vector(Point p1, Point p2) {
-        this.x = p2.GetX() - p1.GetX();
-        this.y = p2.GetY() - p1.GetY();
-        this.z = p2.GetZ() - p1.GetZ();
+    public Vector(double[] data) {
+        this.data = data;
     }
 
-    public double GetX(){
-        return this.x;
+    public int getLength() { return this.data.length; }
+    public double[] toArray() { return this.data; }
+    public double getValue(int position) { return this.data[position]; }
+    public void setValue(double value, int position) {
+        this.data[position] = value;
     }
 
-    public double GetY(){
-        return this.y;
-    }
+    public Vector Product(double scalar) {
+        double[] result = new double[this.data.length];
+        result[0] = this.data[0] * scalar;
+        result[1] = this.data[1] * scalar;
+        result[2] = this.data[2] * scalar;
 
-    public double GetZ(){
-        return this.z;
-    }
-
-    public double magnitude(){
-        return Math.sqrt((x * x) + (y * y) + (z * z));
-    }
-
-    public Vector add(Vector vector){
-        if (vector == null)
-        {
-            return this;
-        }
-        return new Vector(x + vector.x, y + vector.y, z + vector.z);
-    }
-
-    public Vector sub(Vector vector){
-        if (vector == null)
-        {
-            return this;
-        }
-        return new Vector(x - vector.x, y - vector.y, z - vector.z);
-    }
-
-    public Vector product(double number){
-        return new Vector(x * number, y * number, z * number);
-    }
-
-    public double dotProduct(Vector v){
-        return x * v.x + y * v.y + z * v.z;
-    }
-
-    public double cosAlpha(Vector v){
-        return this.dotProduct(v) / (this.magnitude() * v.magnitude());
-    }
-
-    public boolean isLinearDependent(Vector v) {
-        double fx = x * v.x;
-        double fy = y * v.y;
-        double fz = z * v.z;
-        return (fx == fy) && (fx == fz);
-    }
-
-    public Vector crossProduct(Vector v) {
-        double i = this.y * v.z - this.z * v.y;
-        double j = this.z * v.x - this.x * v.z;
-        double k = this.x * v.y - this.y * v.x;
-        return new Vector(i, j, k);
+        return new Vector(result);
     }
 }
