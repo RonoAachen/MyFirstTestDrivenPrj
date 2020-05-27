@@ -48,5 +48,8 @@ public class Main {
         System.out.println(A.toString());
         System.out.println("(laplace) det A = " + A.determinantLaplace());
         System.out.println("(gauss) det A = " + A.determinantGauss());
+
+        var result = A.solveGauss(new double[]{1, 2, 3});
+        System.out.printf("gauss result: %.2f %.2f %.2f", result[0], result[1], result[2]);
     }
 }

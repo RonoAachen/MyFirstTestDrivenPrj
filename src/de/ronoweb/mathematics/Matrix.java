@@ -59,15 +59,27 @@ public class Matrix {
     }
 
 
-    public double[] gauss(double[] vector) {
-        var result = new double[vector.length];
-        var triangle = triangleWithGauss(this.data, vector);
+    public double[] solveGauss(double[] r) {
+        var result = new double[r.length];
+        var m = triangleWithGauss(this.data, r);
 
-        for (var i=vector.length - 1; i>=0; i--) {
-            if (triangle[i][i] == 0.0) {
-                return null;
+        // print out for test
+        // ------------------
+        for(int i=0; i<r.length; i++) {
+            System.out.printf("%d: ", i);
+            for (int j=0; j<r.length + 1; j++) {
+                System.out.printf("%.2f\t", m[i][j]);
             }
-            result[i] = vector[i] / triangle[i][i];
+            System.out.println();
+        }
+
+        result[r.length - 1] = r[r.length - 1] / m[r.length - 1][r.length - 1];
+        for (int i = r.length - 2; i>=0; i--) {
+            double tmp = 0.0;
+            for (int j = i + 1; j<r.length; j++) {
+                tmp += m[i][j] * result[j];
+            }
+            result[i] = (r[i] - tmp) / m[i][i];
         }
 
         return result;
