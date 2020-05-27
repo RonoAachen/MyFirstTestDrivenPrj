@@ -93,7 +93,7 @@ public class Matrix {
         var matrix = triangleWithGauss(this.data);
         double result = 1.0;
         for (var i=0; i<this.numOfRows; i++) {
-            result *= this.data[i][i];
+            result *= matrix[i][i];
         }
         return result;
     }
@@ -138,19 +138,20 @@ public class Matrix {
             return null;
         }
 
-        var result = matrix;
-        for (var col=0; col<this.numOfColumns - 1; col++) {
-            for (var row= col + 1; row<this.numOfRows; row++) {
-                if (this.data[row][col] != 0) {
-                    var factor = (this.data[col][col] / this.data[row][col]) * -1.0;
-                    var tmpRow = product(getDataRow(result, row), factor);
-                    var newRow = add(getDataRow(result,col), tmpRow);
-                    result = setDataRow(result, newRow, row);
+        var m = cloneArray(matrix);
+
+        for (var col=0; col<m[0].length - 1; col++) {
+            for (var row= col + 1; row<m.length; row++) {
+                if (m[row][col] != 0) {
+                    var factor = (m[col][col] / m[row][col]) * -1.0;
+                    var tmpRow = product(getDataRow(m, row), factor);
+                    var newRow = add(getDataRow(m,col), tmpRow);
+                    m = setDataRow(m, newRow, row);
                 }
             }
         }
 
-        return result;
+        return m;
     }
 
     private double[][] triangleWithGauss(double[][] matrix, double[] vector) {
@@ -159,17 +160,18 @@ public class Matrix {
             return null;
         }
 
-        var m = matrix;
+        var m = cloneArray(matrix);
         var v = vector;
-        for (var col=0; col<this.numOfColumns - 1; col++) {
-            for (var row= col + 1; row<this.numOfRows; row++) {
-                if (this.data[row][col] != 0) {
-                    var factor = (this.data[col][col] / this.data[row][col]) * -1.0;
+        for (var col=0; col<m[0].length - 1; col++) {
+            for (var row= col + 1; row<m.length; row++) {
+                if (m[row][col] != 0) {
+                    var factor = (m[col][col] / m[row][col]) * -1.0;
                     var tmpRow = product(getDataRow(m, row), factor);
                     var newRow = add(getDataRow(m,col), tmpRow);
                     m = setDataRow(m, newRow, row);
+                    var tmpV = v[row] * factor;
 
-                    v[row] = v[col] + (v[row] * factor);
+                    v[row] = v[col] + tmpV;
                 }
             }
         }
@@ -236,6 +238,17 @@ public class Matrix {
         }
 
         return -1.0;
+    }
+
+    private static double[][] cloneArray(double[][] a) {
+        double[][] result = new double[a.length][a[0].length];
+
+        for (int r=0; r<a.length; r++) {
+            for (int c=0; c<a[0].length; c++) {
+                result[r][c] = a[r][c];
+            }
+        }
+        return result;
     }
 
 }
